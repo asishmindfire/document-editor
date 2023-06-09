@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import createHttpError from "http-errors";
 import Example from "../model/Example";
+import { IExampleData } from "../types";
 
 export const getExample: RequestHandler = (req, res, next) => {
   res.json({ message: "hello" });
