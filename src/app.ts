@@ -1,12 +1,18 @@
-import express, { ErrorRequestHandler } from "express";
+import dotenv from "dotenv";
+import express from "express";
 import createHttpError from "http-errors";
-import exampleRoute from "./routes/exampleRoutes";
 import mongoose from "mongoose";
+import morgan from "morgan";
 import { DB, PORT } from "./config";
 import { errorHandler } from "./middleware/errorHanlder";
-import morgan from "morgan";
+import exampleRoute from "./routes/exampleRoutes";
+
+// Organize import
+
+dotenv.config();
 const app = express();
 app.use(express.json());
+app.use(morgan("tiny"));
 
 app.use("/", exampleRoute);
 
@@ -16,14 +22,15 @@ app.use(() => {
 
 app.use(errorHandler);
 
-// mongoose
-//   .connect(DB)
-//   .then(() => {
-    // console.log("Connected to db");
+mongoose.set("strictQuery", false);
+mongoose
+  .connect(DB)
+  .then(() => {
+    console.log("Connected to db");
     app.listen(PORT, () => {
       console.log(`Listening On PORT ${PORT}`);
     });
-  // })
-  // .catch(() => {
-  //   throw createHttpError(501, "Unable to connect database");
-  // });
+  })
+  .catch(() => {
+    throw createHttpError(501, "Unable to connect database");
+  });

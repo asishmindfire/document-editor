@@ -4,7 +4,7 @@ import Example from "../model/Example";
 import { IExampleData } from "../types";
 
 export const getExample: RequestHandler = (req, res, next) => {
-  res.json({ message: "hello" });
+  res.status(200).json({ message: "hello" });
 };
 export const getExampleData: RequestHandler = async (req, res, next) => {
   const { name, id }: IExampleData = req.body;
