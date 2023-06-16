@@ -1,9 +1,9 @@
 import { RequestHandler } from "express";
 import createHttpError from "http-errors";
-import Example from "../model/Example";
+import Example from "../model/Documents";
 import { IExampleData } from "../types";
 
-export const getExample: RequestHandler = (req, res, next) => {
+export const getExample: RequestHandler = (req, res) => {
   res.status(200).json({ message: "hello" });
 };
 export const getExampleData: RequestHandler = async (req, res, next) => {
