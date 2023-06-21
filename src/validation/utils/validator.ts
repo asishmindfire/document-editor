@@ -7,7 +7,7 @@ const validator = async (
   body: object,
   next: NextFunction
 ) => {
-  const value = await schemaName.validate(body);
+  const value = schemaName.validate(body);
 
   try {
     value.error

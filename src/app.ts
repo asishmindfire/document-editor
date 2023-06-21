@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import morgan from "morgan";
 import { DB, PORT } from "./config";
 import { errorHandler } from "./middleware/errorHanlder";
-import exampleRoute from "./routes/exampleRoutes";
+import documentRoute from "./routes/documentRoutes";
 
 // Organize import
 
@@ -14,7 +14,7 @@ const app = express();
 app.use(express.json());
 app.use(morgan("tiny"));
 
-app.use("/", exampleRoute);
+app.use("/api/v1/", documentRoute);
 
 app.use(() => {
   throw createHttpError(404, "Route not found");
