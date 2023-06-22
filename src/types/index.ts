@@ -23,3 +23,8 @@ export type TSaveDocument = {
   statusCode?: number;
   message?: string;
 };
+
+export type TRestoreVersion = {
+  documentId: string;
+  data: string;
+};

@@ -1,7 +1,8 @@
 import logger from "../logger";
 import documentRepository from "../repositories/documentRepository";
 import versionRepository from "../repositories/versionRepository";
-import { TDocument } from "../types";
+import { TDocument, TRestoreVersion } from "../types";
+import { Base64 } from "js-base64";
 
 export const saveDocument = async (request: TDocument) => {
   try {
@@ -92,12 +93,31 @@ export const getAllVersions = async (id: string) => {
       return {
         status: 1,
         statusCode: 400,
-        message:
-          "Unable to retrieve document versions, Please try after sometime.",
+        message: "Bad Request.",
       };
     }
   } catch (error: unknown) {
     logger.error(`Error in getAllVersions service : `, error);
+    return { status: false, message: (error as Error).message };
+  }
+};
+
+export const restoreVersion = async (requestData: TRestoreVersion) => {
+  try {
+    const { documentId, data } = requestData;
+    const document = await documentRepository.update(documentId, { data: Base64.decode(data) });
+
+    if (document) {
+      return { status: true };
+    } else {
+      return {
+        status: 1,
+        statusCode: 400,
+        message: "Bad Request.",
+      };
+    }
+  } catch (error: unknown) {
+    logger.error(`Error in restoreVersion service : `, error);
     return { status: false, message: (error as Error).message };
   }
 };

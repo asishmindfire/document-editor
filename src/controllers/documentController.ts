@@ -5,6 +5,7 @@ import logger from "../logger";
 import {
   getAllDocument,
   getAllVersions,
+  restoreVersion,
   saveDocument,
 } from "../services/documentService";
 
@@ -86,6 +87,33 @@ export const getAllVersionController: RequestHandler = async (
     }
   } catch (error: unknown) {
     logger.error(`Error in getAllVersionController catch : `, error);
+    next(createHttpError(500, (error as Error).message));
+  }
+};
+
+export const restoreVersionController: RequestHandler = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const response = await restoreVersion(req.body);
+
+    const { status } = response;
+    if (status) {
+      res.status(200).json({
+        status,
+        message: "Version restored successfully.",
+      });
+    } else {
+      logger.error(`Error in restoreVersionController : `, response);
+      if (response && response.status === 1) {
+        return next(createHttpError(response.statusCode, response.message));
+      }
+      next(createHttpError(500, ""));
+    }
+  } catch (error: unknown) {
+    logger.error(`Error in restoreVersionController catch : `, error);
     next(createHttpError(500, (error as Error).message));
   }
 };
