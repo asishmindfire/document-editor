@@ -4,6 +4,30 @@ import versionRepository from "../repositories/versionRepository";
 import { TDocument, TRestoreVersion } from "../types";
 import { Base64 } from "js-base64";
 
+/**
+ *
+ * {success: true, data: {}}
+ * {success: false, error: {}}
+ */
+
+export const createDocument = async (templateId?: string) => {
+  if (templateId) {
+    //todo template
+  } else {
+    const documentId = await documentRepository.create();
+    if (documentId) {
+      return {
+        status: true,
+        data: documentId,
+      };
+    }
+  }
+  return {
+    status: 1,
+    statusCode: 400,
+    message: "error",
+  };
+};
 export const saveDocument = async (request: TDocument) => {
   try {
     const { uuid, data } = request;
@@ -105,7 +129,9 @@ export const getAllVersions = async (id: string) => {
 export const restoreVersion = async (requestData: TRestoreVersion) => {
   try {
     const { documentId, data } = requestData;
-    const document = await documentRepository.update(documentId, { data: Base64.decode(data) });
+    const document = await documentRepository.update(documentId, {
+      data: Base64.decode(data),
+    });
 
     if (document) {
       return { status: true };

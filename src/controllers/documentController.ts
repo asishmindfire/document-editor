@@ -3,6 +3,7 @@ import createHttpError from "http-errors";
 import { Base64 } from "js-base64";
 import logger from "../logger";
 import {
+  createDocument,
   getAllDocument,
   getAllVersions,
   restoreVersion,
@@ -11,13 +12,15 @@ import {
 
 export const documentController: RequestHandler = async (req, res, next) => {
   try {
-    const { uuid, data } = req.body;
-    const response = await saveDocument({ uuid, data: Base64.decode(data) });
+    //const { templateid } = req.body;
+    //create blank
+    const response = await createDocument();
 
     if (response.status) {
       res.status(201).json({
-        status: true,
+        success: true,
         message: "Document created successfully.",
+        data: { documentId: response.data },
       });
     } else {
       logger.error(`Error in documentController : `, response);

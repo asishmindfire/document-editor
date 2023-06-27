@@ -2,12 +2,11 @@ import Document from "../model/Documents";
 import { TDocument, TUpdateDocument } from "../types";
 
 export default {
-  create: async (requestData: TDocument) => {
-    const { uuid, data } = requestData;
-    return await Document.create({
-      uuid,
-      data,
+  create: async (requestData?: TDocument) => {
+    const response = await Document.create({
+      data: requestData?.data || "",
     });
+    return response._id;
   },
 
   findById: async (uuid: string) => {
